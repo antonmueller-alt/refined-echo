@@ -6,6 +6,9 @@
 // Re-export StyleShortcut type from shared types
 export type { StyleShortcut } from './types'
 import type { StyleShortcut } from './types'
+import { createLogger } from './logger'
+
+const log = createLogger('Styles')
 
 // Unique ID Generator
 export function generateStyleId(): string {
@@ -18,6 +21,7 @@ export const DEFAULT_STYLE_SHORTCUTS: StyleShortcut[] = [
     id: 'linkedin-post',
     name: 'LinkedIn Post',
     triggerPhrases: [
+      // Korrekte Schreibweise
       'linkedin post',
       'linkedin-post',
       'als linkedin post',
@@ -26,6 +30,14 @@ export const DEFAULT_STYLE_SHORTCUTS: StyleShortcut[] = [
       'mach daraus einen linkedin-post',
       'mach daraus ein linkedin post',
       'für linkedin',
+      // Whisper-Varianten (häufige Transkriptionsfehler)
+      'linked in post',
+      'linked in',
+      'als linked in post',
+      'linkt in post',
+      'link in post',
+      'linkdin post',
+      'linkin post',
     ],
     systemPrompt: `Transformiere den folgenden Text in einen professionellen LinkedIn Post.
 
@@ -120,13 +132,16 @@ Antworte NUR mit der Bulletpoint-Liste, keine Erklärungen.`,
  * @returns Das erkannte StyleShortcut oder null
  */
 export function detectStyleCommand(text: string, shortcuts: StyleShortcut[]): StyleShortcut | null {
-  // Normalisiere Text: lowercase, trim, Bindestriche zu Leerzeichen, Satzzeichen am Ende entfernen
+  // Normalisiere Text: lowercase, trim, Bindestriche/Multiple Spaces zu einzelnem Space, Satzzeichen am Ende entfernen
   const normalizeText = (t: string) => t
     .toLowerCase()
     .trim()
-    .replace(/-/g, ' ')
-    .replace(/[.!?,;:]+$/, '')  // Satzzeichen am Ende entfernen (Enrichment fügt diese oft hinzu)
+    .replace(/-/g, ' ')           // Bindestriche zu Leerzeichen
+    .replace(/\s+/g, ' ')         // Multiple Spaces zu einem
+    .replace(/[.!?,;:]+$/, '')    // Satzzeichen am Ende entfernen
   const lowerText = normalizeText(text)
+  
+  log.debug('🔍 Style Detection - Normalized text ends with:', lowerText.slice(-50))
   
   for (const shortcut of shortcuts) {
     if (!shortcut.enabled) continue
@@ -136,6 +151,7 @@ export function detectStyleCommand(text: string, shortcuts: StyleShortcut[]): St
       
       // Prüfe ob Text mit Trigger endet
       if (lowerText.endsWith(lowerTrigger)) {
+        log.info('✅ Style detected:', shortcut.name, '- Trigger:', trigger)
         return shortcut
       }
       
