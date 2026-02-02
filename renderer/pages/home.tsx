@@ -118,8 +118,13 @@ export default function HomePage() {
     return tracks.length > 0 && tracks.every(track => track.readyState === 'live')
   }
   
+  // Mikrofon wird LAZY initialisiert (erst bei erstem Recording)
+  // Grund: getUserMedia() auf Windows killt uiohook-napi Keyboard-Events
+  // wenn die App fokussiert ist (bekannter Bug: github.com/SnosMe/uiohook-napi/issues/54)
   useEffect(() => {
-    initMicrophone()
+    // Nur Status prüfen, NICHT getUserMedia aufrufen
+    setMicStatus('ready') // Optimistisch - wird bei Recording geprüft
+    log.info('🎤 Mikrofon wird bei erstem Recording initialisiert (Lazy Init für Windows-Kompatibilität)')
 
     return () => {
       streamRef.current?.getTracks().forEach(track => track.stop())
@@ -458,6 +463,44 @@ export default function HomePage() {
     return () => unsubscribe()
   }, [])
 
+  // Fallback-Hotkey für Windows: Alt-Taste im Renderer erkennen
+  // Wenn uiohook-napi durch getUserMedia gekillt wird, funktioniert dieser Fallback
+  // wenn die App fokussiert ist
+  useEffect(() => {
+    // Nur auf Windows aktivieren
+    const isWindows = navigator.userAgent.includes('Windows')
+    if (!isWindows) return
+
+    let altPressed = false
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Left Alt (Alt ohne AltGraph) = keyCode 18, location 1
+      if (e.key === 'Alt' && e.location === 1 && !altPressed) {
+        altPressed = true
+        log.debug('⌨️ [Renderer Fallback] Alt KeyDown - triggering recording start')
+        window.ipc.send('fallback-hotkey', { action: 'start' })
+      }
+    }
+    
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Alt' && e.location === 1 && altPressed) {
+        altPressed = false
+        log.debug('⌨️ [Renderer Fallback] Alt KeyUp - triggering recording stop')
+        window.ipc.send('fallback-hotkey', { action: 'stop' })
+      }
+    }
+    
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+    
+    log.info('⌨️ Windows Fallback-Hotkey aktiviert (Alt-Taste im Renderer)')
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+    }
+  }, [])
+
   // Manual recording toggle (click on mic button)
   const handleMicButtonClick = () => {
     if (processingStatus !== 'idle' && processingStatus !== 'done' && processingStatus !== 'done-raw') {
@@ -482,7 +525,11 @@ export default function HomePage() {
     if (processingStatus === 'transforming') return 'Transformiere Stil...'
     if (processingStatus === 'done') return 'Erfolgreich eingefügt'
     if (processingStatus === 'done-raw') return 'Ohne Korrektur eingefügt'
-    return 'Halte Left-Option ⌥ zum Aufnehmen'
+    // Plattformspezifische Hotkey-Anzeige
+    const isWindows = navigator.userAgent.includes('Windows')
+    return isWindows 
+      ? 'Halte Left-Alt zum Aufnehmen'
+      : 'Halte Left-Option ⌥ zum Aufnehmen'
   }
 
   const isProcessing = processingStatus === 'transcribing' || processingStatus === 'enriching' || processingStatus === 'transforming'

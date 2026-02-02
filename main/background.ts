@@ -440,6 +440,20 @@ ipcMain.on('manual-recording-stop', () => {
   }
 })
 
+// Fallback-Hotkey Handler (für Windows, wenn uiohook durch getUserMedia deaktiviert wird)
+// Der Renderer sendet diese Events wenn die App fokussiert ist
+ipcMain.on('fallback-hotkey', (_event, { action }: { action: 'start' | 'stop' }) => {
+  if (action === 'start' && getAppState() === 'idle') {
+    log.debug('⌨️ [Fallback] Recording START via Renderer')
+    setAppState('recording')
+    broadcastToAllWindows('recording-state', { recording: true })
+  } else if (action === 'stop' && getAppState() === 'recording') {
+    log.debug('⌨️ [Fallback] Recording STOP via Renderer')
+    setAppState('processing')
+    broadcastToAllWindows('recording-state', { recording: false })
+  }
+})
+
 // === Overlay-Position IPC Handler ===
 
 // Overlay-Position speichern
