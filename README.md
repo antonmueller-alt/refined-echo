@@ -35,7 +35,6 @@
 
 - **macOS 12.0+** (Monterey oder neuer) oder **Windows 10/11**
 - **Apple Silicon (M1/M2/M3)**, **Intel Mac** oder **Windows x64**
-- **Node.js 18+** (nur für Entwicklung)
 
 ### Option 1: Download (empfohlen)
 
@@ -45,19 +44,38 @@ Lade den neuesten Release herunter:
 - **macOS:** `Refined Echo-X.X.X.dmg` (Universal Binary)
 - **Windows:** `Refined Echo Setup X.X.X.exe` (NSIS Installer)
 
-#### macOS Gatekeeper-Workaround
+#### macOS Installation (wichtig!)
 
-   Da die App nicht mit einem Apple Developer Zertifikat signiert ist, blockiert macOS sie standardmäßig:
-   
-   1. Beim ersten Öffnen erscheint: *"Refined Echo" kann nicht geöffnet werden*
-   2. **Rechtsklick** auf die App → **"Öffnen"** wählen
-   3. Im Dialog auf **"Öffnen"** klicken
-   4. Dies ist nur beim ersten Start nötig
+Da die App nicht mit einem Apple Developer Zertifikat signiert ist, sind auf macOS folgende Schritte nötig:
 
-   *Alternativ via Terminal:*
+1. **DMG öffnen** und App nach `/Applications` ziehen
+
+2. **Terminal öffnen** und diese Befehle ausführen:
    ```bash
    xattr -cr /Applications/Refined\ Echo.app
+   codesign --force --deep --sign - /Applications/Refined\ Echo.app
+   open /Applications/Refined\ Echo.app
    ```
+
+3. **Bedienungshilfen aktivieren:**
+   - Es öffnet sich automatisch das Fenster "Datenschutz & Sicherheit"
+   - Scrolle zu **"Bedienungshilfen"**
+   - Aktiviere das Häkchen bei **"Refined Echo"**
+   - Schließe die Einstellungen
+
+4. **App erneut starten:**
+   ```bash
+   open /Applications/Refined\ Echo.app
+   ```
+
+> ⚠️ **Hinweis:** Die Bedienungshilfen-Berechtigung ist nötig für die Hotkey-Erkennung (Left-Option ⌥) und das automatische Einfügen (Cmd+V).
+
+#### Windows Installation
+
+1. Installer ausführen (`Refined Echo Setup X.X.X.exe`)
+2. Installation abschließen
+3. App starten
+4. Beim ersten Start: **Mikrofon-Berechtigung** erlauben
 
 ### Option 2: Selbst bauen
 
@@ -147,7 +165,7 @@ Makros werden nach der KI-Korrektur angewendet und unterstützen:
 Voice Pipeline:
 ┌─────────┐    ┌─────────────┐    ┌─────────────┐    ┌──────────┐
 │ Hotkey  │───►│ MediaRecorder│───►│ Groq Whisper│───►│ Groq     │
-│ (⌥ Alt) │    │ (WebM/Opus) │    │ (STT)       │    │ Llama    │
+│ (⌥ Opt) │    │ (WebM/Opus) │    │ (STT)       │    │ Llama    │
 └─────────┘    └─────────────┘    └─────────────┘    │ (Enrich) │
                                                       └────┬─────┘
                                                            │
@@ -175,7 +193,7 @@ idle ──► recording ──► processing ──► pasting ──► idle
 
 ### Warum Electron + Next.js (Nextron)?
 - **Electron**: Bewährte Desktop-Runtime mit voller OS-Integration (Hotkeys, Clipboard, AppleScript)
-- **Next.js**: Modernes React-Framework mit SSG für schnelle Renderer-Performance
+- **Next.js**: Vorgabe + Modernes React-Framework mit SSG für schnelle Renderer-Performance
 - **Nextron**: Vereint beide mit minimalem Boilerplate
 
 ### Warum Groq API?
@@ -190,8 +208,7 @@ idle ──► recording ──► processing ──► pasting ──► idle
 
 ### Warum Auto-Paste?
 - **Nahtloser Workflow**: Text landet direkt im aktiven Fenster (Slack, Mail, IDE, etc.)
-- **Keine Zwischenschritte**: Kein manuelles Cmd+V nötig
-- **Opt-out möglich**: Text bleibt zusätzlich im Clipboard für manuelles Einfügen
+- **Keine Zwischenschritte**: Kein manuelles Cmd+V nötig, aber trotzdem möglich
 
 ### Warum Left-Option ⌥ als Hotkey?
 - **MacBook Air-kompatibel**: Keine rechte Ctrl-Taste auf kompakten Keyboards
@@ -233,10 +250,5 @@ refined-echo/
 
 ## 📝 Lizenz
 
-MIT © Anton Muller
+MIT © Anton Müller
 
----
-
-<p align="center">
-  Made with ❤️ and 🎤
-</p>
