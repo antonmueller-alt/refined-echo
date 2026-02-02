@@ -1,22 +1,10 @@
-<p align="center">
-  <img src="resources/Refined-Echo-Logo-long.png" alt="Refined Echo Logo" width="400">
-</p>
+# 🎤 Refined Echo
 
-<h1 align="center">Refined Echo</h1>
+**Voice-to-Text mit KI-Enrichment für macOS & Windows**
 
-<p align="center">
-  <strong>🎤 Voice-to-Text mit KI-Enrichment für macOS & Windows</strong>
-</p>
+Hold-to-Talk → Whisper STT → Llama Korrektur → Automatisches Einfügen
 
-<p align="center">
-  Hold-to-Talk → Whisper STT → Llama Korrektur → Automatisches Einfügen
-</p>
-
-<p align="center">
-  <a href="https://github.com/antonmueller-alt/refined-echo/releases">Download</a> •
-  <a href="#-installation">Installation</a> •
-  <a href="#-verwendung">Verwendung</a>
-</p>
+[📥 Download](https://github.com/antonmueller-alt/refined-echo/releases) • [Installation](#-installation) • [Verwendung](#-verwendung)
 
 ---
 
