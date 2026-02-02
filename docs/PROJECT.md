@@ -1,12 +1,39 @@
 # refined-echo
 
 **GitHub:** https://github.com/antonmueller-alt/refined-echo
+**Releases:** https://github.com/antonmueller-alt/refined-echo/releases
 
 ## Status
-> Stand: 2026-02-02 | Aktuell: Phase 5.3 Windows-Support ✅ | GitHub-Repo erstellt
+> Stand: 2026-02-02 | Version: 0.9.4 | GitHub Actions CI/CD ✅
 
 ## Aktuelle Aufgabe
-**Abgeschlossen: Overlay-Interaktivität & Manuelle Aufnahme**
+**Abgeschlossen: Windows-Support & GitHub Actions**
+
+### Erledigte Änderungen (2026-02-02, Session 4)
+
+#### GitHub & CI/CD
+1. **Git initialisiert:** ✅ Repository lokal erstellt
+2. **GitHub Repo:** ✅ https://github.com/antonmueller-alt/refined-echo
+3. **GitHub Actions:** ✅ Automatische Builds bei Tag-Push (macOS + Windows)
+4. **Erster Release:** ✅ v0.9.4 Tag erstellt, Build läuft
+
+#### Windows-Support
+5. **Build-Config:** ✅ NSIS-Installer in `electron-builder.yml`
+6. **Build-Scripts:** ✅ `npm run build:win`, `build:win:x64`, `build:all`
+7. **Cross-Platform Paste:** ✅ Windows (PowerShell), Linux (xdotool), macOS (osascript)
+8. **Accessibility-Check:** ✅ Nur auf macOS ausgeführt
+
+### Neue Dateien (Session 4)
+- `.github/workflows/release.yml` - GitHub Actions Workflow für automatische Releases
+
+### Geänderte Dateien (Session 4)
+- `electron-builder.yml` - Windows NSIS-Konfiguration
+- `package.json` - Windows Build-Scripts
+- `main/background.ts` - Cross-Platform Paste-Handler
+- `docs/PROJECT.md` - GitHub-Link, Status
+- `docs/CHANGELOG.md` - v0.9.4 Eintrag
+
+---
 
 ### Erledigte Änderungen (2026-02-02, Session 3)
 

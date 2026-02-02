@@ -7,12 +7,19 @@
 - **Windows Build-Config:** NSIS-Installer Konfiguration in electron-builder.yml
 - **Cross-Platform Paste:** Unterstützung für Windows (PowerShell SendKeys) und Linux (xdotool)
 - **Build-Scripts:** `npm run build:win` und `npm run build:all` hinzugefügt
+- **GitHub Actions CI/CD:** Automatische Builds und Releases bei Git-Tags
 
 ### Technische Änderungen
 - `electron-builder.yml`: `win`- und `nsis`-Blöcke für Windows-Installer
 - `package.json`: Neue Scripts `build:win`, `build:win:x64`, `build:all`
 - `background.ts`: Paste-Handler mit plattformspezifischer Logik (macOS/Windows/Linux)
 - `background.ts`: Accessibility-Check nur auf macOS ausgeführt
+- `.github/workflows/release.yml`: Automatische Builds für macOS und Windows bei Tag-Push
+
+### Installation
+- **Releases:** https://github.com/antonmueller-alt/refined-echo/releases
+- **macOS:** `.dmg` Universal Binary (arm64 + x64)
+- **Windows:** `.exe` NSIS-Installer
 
 ---
 
