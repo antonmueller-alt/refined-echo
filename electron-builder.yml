@@ -1,0 +1,40 @@
+appId: com.antonmuller.refined-echo
+productName: Refined Echo
+copyright: Copyright © 2026 Anton Muller
+
+directories:
+  output: dist
+  buildResources: resources
+
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+
+mac:
+  category: public.app-category.productivity
+  target:
+    - target: dmg
+      arch:
+        - universal
+  icon: resources/icon.icns
+  hardenedRuntime: true
+  entitlements: resources/entitlements.plist
+  entitlementsInherit: resources/entitlements.plist
+  gatekeeperAssess: false
+  # Für unsignierte Apps: User muss Rechtsklick → Öffnen verwenden
+  # Mit Apple Developer Account: identity und notarize konfigurieren
+
+dmg:
+  title: "${productName} ${version}"
+  iconSize: 80
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications
+
+publish: null
