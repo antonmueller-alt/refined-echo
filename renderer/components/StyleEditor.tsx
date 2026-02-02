@@ -185,7 +185,7 @@ export default function StyleEditor({ styles, onStylesChange }: StyleEditorProps
                 value={editingStyle.triggerPhrases.join('\n')}
                 onChange={(e) => setEditingStyle({ 
                   ...editingStyle, 
-                  triggerPhrases: e.target.value.split('\n').filter(t => t.length > 0)
+                  triggerPhrases: e.target.value.split('\n')
                 })}
                 className="textarea-glass h-24"
                 placeholder="linkedin post&#10;als linkedin post&#10;für linkedin"
