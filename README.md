@@ -5,11 +5,17 @@
 <h1 align="center">Refined Echo</h1>
 
 <p align="center">
-  <strong>🎤 Voice-to-Text mit KI-Enrichment für macOS</strong>
+  <strong>🎤 Voice-to-Text mit KI-Enrichment für macOS & Windows</strong>
 </p>
 
 <p align="center">
   Hold-to-Talk → Whisper STT → Llama Korrektur → Automatisches Einfügen
+</p>
+
+<p align="center">
+  <a href="https://github.com/antonmueller-alt/refined-echo/releases">Download</a> •
+  <a href="#-installation">Installation</a> •
+  <a href="#-verwendung">Verwendung</a>
 </p>
 
 ---
@@ -27,15 +33,19 @@
 
 ### Systemvoraussetzungen
 
-- **macOS 12.0+** (Monterey oder neuer)
-- **Apple Silicon (M1/M2/M3)** oder **Intel Mac** (Universal Binary)
+- **macOS 12.0+** (Monterey oder neuer) oder **Windows 10/11**
+- **Apple Silicon (M1/M2/M3)**, **Intel Mac** oder **Windows x64**
 - **Node.js 18+** (nur für Entwicklung)
 
-### Option 1: DMG (empfohlen)
+### Option 1: Download (empfohlen)
 
-1. Lade `Refined Echo-0.1.0-universal.dmg` aus dem `dist/` Ordner
-2. Öffne die DMG und ziehe die App in den Applications-Ordner
-3. **⚠️ Wichtig – Gatekeeper-Workaround:**
+Lade den neuesten Release herunter:
+📥 **[GitHub Releases](https://github.com/antonmueller-alt/refined-echo/releases)**
+
+- **macOS:** `Refined Echo-X.X.X.dmg` (Universal Binary)
+- **Windows:** `Refined Echo Setup X.X.X.exe` (NSIS Installer)
+
+#### macOS Gatekeeper-Workaround
 
    Da die App nicht mit einem Apple Developer Zertifikat signiert ist, blockiert macOS sie standardmäßig:
    
@@ -53,7 +63,7 @@
 
 ```bash
 # Repository klonen
-git clone https://github.com/antonmuller/refined-echo.git
+git clone https://github.com/antonmueller-alt/refined-echo.git
 cd refined-echo
 
 # Dependencies installieren
@@ -63,9 +73,11 @@ npm install
 npm run dev
 
 # Production Build erstellen
-npm run build:mac          # Universal Binary (arm64 + x64)
-npm run build:mac:arm64    # Nur Apple Silicon
-npm run build:mac:x64      # Nur Intel
+npm run build:mac          # macOS Universal Binary (arm64 + x64)
+npm run build:mac:arm64    # macOS nur Apple Silicon
+npm run build:mac:x64      # macOS nur Intel
+npm run build:win          # Windows x64
+npm run build:all          # macOS + Windows
 ```
 
 Der Build wird in `dist/` erstellt.
