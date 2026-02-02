@@ -1,7 +1,9 @@
 # refined-echo
 
+**GitHub:** https://github.com/antonmueller-alt/refined-echo
+
 ## Status
-> Stand: 2026-02-02 | Aktuell: Phase 5.2 Overlay-Interaktivität ✅ | Bereit für Tests
+> Stand: 2026-02-02 | Aktuell: Phase 5.3 Windows-Support ✅ | GitHub-Repo erstellt
 
 ## Aktuelle Aufgabe
 **Abgeschlossen: Overlay-Interaktivität & Manuelle Aufnahme**

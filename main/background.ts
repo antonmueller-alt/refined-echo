@@ -346,22 +346,26 @@ ipcMain.on('recording-discarded', () => {
   setAppState('idle')
 })
 
-// Paste-Text Handler: Clipboard + Cmd+V Simulation
+// Paste-Text Handler: Clipboard + Paste-Simulation (Cross-Platform)
 ipcMain.on('paste-text', async (event, { text }: { text: string }) => {
   setAppState('pasting')
+  const isMac = process.platform === 'darwin'
+  const isWin = process.platform === 'win32'
   
   try {
-    // Accessibility Permission prüfen (macOS)
-    const hasAccess = systemPreferences.isTrustedAccessibilityClient(false)
-    if (!hasAccess) {
-      log.warn('⚠️  Accessibility Permission fehlt für Paste-Simulation')
-      log.warn('   → Systemeinstellungen → Sicherheit & Datenschutz → Datenschutz → Bedienungshilfen')
-      log.warn('   → Electron.app hinzufügen und Häkchen setzen')
-      // Trigger Permission-Dialog
-      systemPreferences.isTrustedAccessibilityClient(true)
-      setAppState('error')
-      event.reply('paste-complete', { success: false, error: 'Accessibility permission required' })
-      return
+    // Accessibility Permission prüfen (nur macOS)
+    if (isMac) {
+      const hasAccess = systemPreferences.isTrustedAccessibilityClient(false)
+      if (!hasAccess) {
+        log.warn('⚠️  Accessibility Permission fehlt für Paste-Simulation')
+        log.warn('   → Systemeinstellungen → Sicherheit & Datenschutz → Datenschutz → Bedienungshilfen')
+        log.warn('   → Electron.app hinzufügen und Häkchen setzen')
+        // Trigger Permission-Dialog
+        systemPreferences.isTrustedAccessibilityClient(true)
+        setAppState('error')
+        event.reply('paste-complete', { success: false, error: 'Accessibility permission required' })
+        return
+      }
     }
 
     // 1. Text ins Clipboard
@@ -371,13 +375,32 @@ ipcMain.on('paste-text', async (event, { text }: { text: string }) => {
     // 2. Kurze Verzögerung damit Clipboard bereit ist
     await new Promise(resolve => setTimeout(resolve, 100))
 
-    // 3. Cmd+V simulieren (macOS AppleScript)
-    await new Promise<void>((resolve, reject) => {
-      exec(
-        `osascript -e 'tell application "System Events" to keystroke "v" using command down'`,
-        (error) => error ? reject(error) : resolve()
-      )
-    })
+    // 3. Paste-Tastenkombination simulieren (plattformspezifisch)
+    if (isMac) {
+      // macOS: AppleScript Cmd+V
+      await new Promise<void>((resolve, reject) => {
+        exec(
+          `osascript -e 'tell application "System Events" to keystroke "v" using command down'`,
+          (error) => error ? reject(error) : resolve()
+        )
+      })
+    } else if (isWin) {
+      // Windows: PowerShell SendKeys Ctrl+V
+      await new Promise<void>((resolve, reject) => {
+        exec(
+          `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('^v')"`,
+          (error) => error ? reject(error) : resolve()
+        )
+      })
+    } else {
+      // Linux: xdotool Ctrl+V (falls installiert)
+      await new Promise<void>((resolve, reject) => {
+        exec(
+          `xdotool key ctrl+v`,
+          (error) => error ? reject(error) : resolve()
+        )
+      })
+    }
 
     log.info('✅ Paste erfolgreich (Text bleibt im Clipboard)')
     

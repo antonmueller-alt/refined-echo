@@ -37,4 +37,20 @@ dmg:
       type: link
       path: /Applications
 
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: resources/icon.ico
+  publisherName: Anton Muller
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: true
+  installerIcon: resources/icon.ico
+  uninstallerIcon: resources/icon.ico
+
 publish: null

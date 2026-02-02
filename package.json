@@ -11,6 +11,9 @@
     "build:mac": "nextron build --mac",
     "build:mac:arm64": "nextron build --mac --arm64",
     "build:mac:x64": "nextron build --mac --x64",
+    "build:win": "nextron build --win",
+    "build:win:x64": "nextron build --win --x64",
+    "build:all": "nextron build --mac --win",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {

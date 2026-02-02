@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.9.4] - 2026-02-02 - Phase 5.3: Windows-Support & GitHub
+
+### Neue Features
+- **GitHub Repository:** Projekt auf GitHub veröffentlicht (https://github.com/antonmueller-alt/refined-echo)
+- **Windows Build-Config:** NSIS-Installer Konfiguration in electron-builder.yml
+- **Cross-Platform Paste:** Unterstützung für Windows (PowerShell SendKeys) und Linux (xdotool)
+- **Build-Scripts:** `npm run build:win` und `npm run build:all` hinzugefügt
+
+### Technische Änderungen
+- `electron-builder.yml`: `win`- und `nsis`-Blöcke für Windows-Installer
+- `package.json`: Neue Scripts `build:win`, `build:win:x64`, `build:all`
+- `background.ts`: Paste-Handler mit plattformspezifischer Logik (macOS/Windows/Linux)
+- `background.ts`: Accessibility-Check nur auf macOS ausgeführt
+
+---
+
 ## [0.9.3] - 2026-02-02 - Phase 5.2: Overlay-Interaktivität
 
 ### Neue Features
