@@ -3,6 +3,7 @@ import { app, ipcMain, clipboard, systemPreferences, screen, BrowserWindow, nati
 import { exec } from 'child_process'
 import serve from 'electron-serve'
 import Store from 'electron-store'
+import { uIOhook } from 'uiohook-napi'
 import { createWindow } from './helpers'
 import { initHotkeys } from './hotkeys'
 import type { Macro, HistoryEntry, StyleShortcut, AppState } from './types'
@@ -234,6 +235,9 @@ if (isProd) {
 })()
 
 app.on('window-all-closed', () => {
+  // uiohook stoppen (wichtig für sauberes Cleanup)
+  uIOhook.stop()
+  
   // Timeout bereinigen vor App-Beendigung
   if (errorResetTimeout) {
     clearTimeout(errorResetTimeout)

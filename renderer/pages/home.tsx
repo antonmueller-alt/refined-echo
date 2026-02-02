@@ -178,7 +178,7 @@ export default function HomePage() {
   const handleMacrosChange = (newMacros: Macro[]) => {
     setMacros(newMacros)
     macrosRef.current = newMacros
-    window.ipc.send('save-macros', { macros: newMacros })
+    window.ipc.send('set-macros', { macros: newMacros })
     log.debug('📦 Makros gespeichert:', newMacros.length, 'Einträge')
   }
 
